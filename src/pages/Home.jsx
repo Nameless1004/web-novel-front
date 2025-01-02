@@ -1,5 +1,4 @@
-// src/components/Home.js
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore'; // Zustand store
 
@@ -13,49 +12,124 @@ const novels = [
 const Home = () => {
   const navigate = useNavigate();
   const { accessToken, clearAccessToken } = useAuthStore(); // 로그인 상태 가져오기
+  const [isProfileOpen, setProfileOpen] = useState(false); // 프로필 팝업 상태
 
   const handleLogout = () => {
     clearAccessToken(); // 로그아웃 처리
     navigate('/login'); // 로그인 페이지로 리디렉션
   };
 
+  const handleMyNovels = () => {
+    navigate('/mynovels');
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* 상단 네비게이션 */}
-      <header className="bg-purple-600 text-white p-6 rounded-b-3xl shadow-lg">
-        <div className="container mx-auto flex justify-between items-center">
+      <header className="bg-purple-600 text-white shadow-lg">
+        <div className="container mx-auto flex justify-between items-center py-4 px-6">
           <h1 className="text-3xl font-bold tracking-wider">노벨피아</h1>
-          <nav>
-            <ul className="flex space-x-8 text-lg">
-              <li><a href="/" className="hover:underline hover:text-purple-200">홈</a></li>
-              {accessToken ? (
-                <>
-                  <li><button onClick={handleLogout} className="hover:underline hover:text-purple-200">로그아웃</button></li>
-                  <li><a href="/profile" className="hover:underline hover:text-purple-200">내 정보</a></li>
-                </>
-              ) : (
-                <>
-                  <li><a href="/login" className="hover:underline hover:text-purple-200">로그인</a></li>
-                  <li><a href="/signup" className="hover:underline hover:text-purple-200">회원가입</a></li>
-                </>
-              )}
-            </ul>
+          <nav className="flex items-center space-x-6">
+            <button className="text-white flex flex-col items-center hover:text-purple-200">
+              <img src="/icons/home.png" alt="홈" className="w-6 h-6 mb-1" />
+              홈
+            </button>
+            <button onClick={handleMyNovels} className="text-white flex flex-col items-center hover:text-purple-200">
+              <img src="/icons/novels.png" alt="내 작품" className="w-6 h-6 mb-1" />
+              내 작품
+            </button>
+            <button className="text-white flex flex-col items-center hover:text-purple-200">
+              <img src="/icons/notification.png" alt="알림" className="w-6 h-6 mb-1" />
+              알림
+            </button>
+            <button
+              onClick={() => setProfileOpen(!isProfileOpen)}
+              className="text-white flex flex-col items-center hover:text-purple-200"
+            >
+              <img src="/icons/profile.png" alt="프로필" className="w-6 h-6 mb-1" />
+              프로필
+            </button>
           </nav>
         </div>
       </header>
 
-      {/* 메인 콘텐츠 */}
-      <main className="container mx-auto p-8">
-        {/* 검색 기능 */}
-        <div className="mb-8 flex justify-center">
-          <input
-            type="text"
-            placeholder="웹소설을 검색하세요"
-            className="w-3/4 sm:w-1/2 p-3 border border-gray-300 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
+      {/* 프로필 팝업 */}
+      {isProfileOpen && (
+        <div className="fixed top-16 right-6 w-72 bg-white shadow-lg rounded-lg p-6 z-50">
+          {accessToken ? (
+            <div>
+              <div className="flex items-center space-x-4">
+                <img
+                  src="https://via.placeholder.com/50"
+                  alt="프로필 이미지"
+                  className="w-12 h-12 rounded-full"
+                />
+                <div>
+                  <p className="text-lg font-semibold">사용자_123</p>
+                  <p className="text-sm text-gray-500">PLUS 멤버십 활성화</p>
+                </div>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-4 text-center">
+                <div>
+                  <p className="text-gray-700">코인</p>
+                  <p className="text-lg font-bold">0</p>
+                </div>
+                <div>
+                  <p className="text-gray-700">마일리지</p>
+                  <p className="text-lg font-bold">4</p>
+                </div>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="block w-full mt-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+              >
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="block w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            >
+              로그인
+            </button>
+          )}
         </div>
+      )}
 
-        {/* 웹소설 목록 */}
+      {/* 배너 섹션 */}
+      <section className="relative bg-cover bg-center h-64" style={{ backgroundImage: 'url(/path-to-your-banner-image.jpg)' }}>
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white">
+          <h2 className="text-4xl font-bold">웹소설/웹만화 한 달간 무제한 열람</h2>
+          <button className="mt-4 px-6 py-2 bg-purple-500 rounded-full text-lg shadow-lg hover:bg-purple-400">구독하기</button>
+        </div>
+      </section>
+
+      {/* 카테고리 섹션 */}
+      <section className="container mx-auto py-8">
+        <div className="flex justify-around">
+          <div className="flex flex-col items-center">
+            <img src="/icons/subscribe.png" alt="구독하기" className="w-12 h-12 mb-2" />
+            <span>구독하기</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <img src="/icons/coin.png" alt="코인샵" className="w-12 h-12 mb-2" />
+            <span>코인샵</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <img src="/icons/event.png" alt="이벤트" className="w-12 h-12 mb-2" />
+            <span>이벤트</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <img src="/icons/ranking.png" alt="랭킹" className="w-12 h-12 mb-2" />
+            <span>랭킹</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 인기 작품 섹션 */}
+      <main className="container mx-auto p-8">
+        <h2 className="text-2xl font-bold mb-4">노벨피아 인기 작품</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {novels.map((novel) => (
             <div key={novel.id} className="bg-white shadow-xl rounded-2xl overflow-hidden transition-transform transform hover:scale-105 border border-purple-300">
