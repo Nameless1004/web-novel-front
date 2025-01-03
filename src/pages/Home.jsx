@@ -14,11 +14,11 @@ const novels = [
 
 const Home = () => {
   const navigate = useNavigate();
-  const { accessToken, clearAccessToken } = useAuthStore(); // 로그인 상태 가져오기
+  const { accessToken, clearInfo } = useAuthStore(); // 로그인 상태 가져오기
   const [isProfileOpen, setProfileOpen] = useState(false); // 프로필 팝업 상태
 
   const handleLogout = () => {
-    clearAccessToken(); // 로그아웃 처리
+    clearInfo(); // 로그아웃 처리
     navigate('/login'); // 로그인 페이지로 리디렉션
   };
 

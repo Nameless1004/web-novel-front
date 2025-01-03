@@ -10,7 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   // Use Zustand store for access token
-  const { setAccessToken, clearAccessToken } = useAuthStore();
+  const { setInfo, clearInfo } = useAuthStore();
 
   // 일반 로그인 처리
   const handleLogin = async (e) => {
@@ -18,13 +18,10 @@ const Login = () => {
 
     try {
       const response = await postRequest(`${API_URLS.LOGIN}`, { username, password });
-      const { accessToken, refreshToken } = response.data;
-
+      const { accessToken, refreshToken, userId } = response.data;
+      console.log(response)
       // JWT 토큰 상태에 저장 (Zustand)
-      setAccessToken(accessToken);
-
-      // Refresh Token을 localStorage에 저장 (선택적으로 사용)
-      localStorage.setItem('refreshToken', refreshToken);
+      setInfo(accessToken, refreshToken, userId);
 
       alert('로그인 성공!');
       navigate('/'); // 홈 화면으로 이동

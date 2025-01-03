@@ -15,6 +15,7 @@ export const API_URLS = {
   // 추가적인 API 엔드포인트들...
   TAG: `${API_BASE_URL}/api/tags`,
   GET_NOVEL: `${API_BASE_URL}/api/novels`,
+  GET_MY_NOVEL: `${API_BASE_URL}/api/user/novels`,
   UPDATE_NOVEL: (novelId) => `${API_BASE_URL}/api/novels/${novelId}`,
   GET_NOVEL_DETAILS: (novelId) => `${API_BASE_URL}/api/novels/${novelId}`,
   CREATE_EPISODE: (novelId) => `${API_BASE_URL}/api/novels/${novelId}/episodes`,

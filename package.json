@@ -23,6 +23,7 @@
     "react-tsparticles": "^2.12.2",
     "slate": "^0.112.0",
     "slate-react": "^0.112.0",
+    "web-novel-site": "file:",
     "zustand": "^5.0.2"
   },
   "devDependencies": {

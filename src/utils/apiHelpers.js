@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
     console.log("error!!!!!!!!!!!!!!!!!!" + status)
     // 401 Unauthorized 에러인 경우
     if (status === 401) {
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = useAuthStore.getState().refreshToken;
       
       if (refreshToken && !originalRequest._retry) {
         originalRequest._retry = true; // 재시도를 추적하기 위한 플래그 설정
@@ -44,13 +44,10 @@ axiosInstance.interceptors.response.use(
           });
 
           console.log(response)
-          const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+          const { userId, accessToken, refreshToken: newRefreshToken } = response.data.data;
 
           // 새 액세스 토큰을 상태 관리에 저장
-          useAuthStore.getState().setAccessToken(accessToken);
-
-          // 새 리프레시 토큰을 로컬 스토리지에 저장
-          localStorage.setItem('refreshToken', newRefreshToken);
+          useAuthStore.getState().setInfo(accessToken, newRefreshToken, userId);
 
           // 새 액세스 토큰을 Authorization 헤더에 추가하여 원래 요청을 재시도
           originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
