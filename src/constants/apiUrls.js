@@ -19,6 +19,8 @@ export const API_URLS = {
   GET_NOVEL_DETAILS: (novelId) => `${API_BASE_URL}/api/novels/${novelId}`,
   CREATE_EPISODE: (novelId) => `${API_BASE_URL}/api/novels/${novelId}/episodes`,
   GET_EPISODE: (novelId) => `${API_BASE_URL}/api/novels/${novelId}/episodes`,
+  GET_EPISODE_DETAILS: (novelId,episodeId) => `${API_BASE_URL}/api/novels/${novelId}/episodes/${episodeId}`,
+  EDIT_EPISODE: (novelId,episodeId) => `${API_BASE_URL}/api/novels/${novelId}/episodes/${episodeId}`,
   DELETE_EPISODE: (novelId,episodeId) => `${API_BASE_URL}/api/novels/${novelId}/episodes/${episodeId}`,
   CREATE_NOVEL: `${API_BASE_URL}/api/novels`,
   CHECK_USERNAME: `${API_BASE_URL}/api/users/check/username`,

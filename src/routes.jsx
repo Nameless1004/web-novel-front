@@ -5,7 +5,8 @@ import Home from './pages/Home';  // Import Home page
 import MyNovel from './pages/MyNovel'
 import MyNovelDetails from './pages/MyNovelDetails'
 import MyNovelEpisode from './pages/MyNovelEpisode'
-import EpisodeCreate from './pages/EpisodeCreate'
+import EpisodeCreate from './pages/episode/EpisodeCreate'
+import EpisodeEdit from './pages/episode/EpisodeEdit'
 import NovelPatch from './pages/NovelPatch'
 import Publishing from './pages/Publishing'
 import LoginSuccess from './components/LoginSuccess';
@@ -23,6 +24,7 @@ const RoutesConfig = () => (
     <Route path="/publishing/update" element={<NovelPatch />} />
     <Route path="/mynovels/:novelId/episodes" element={<MyNovelEpisode />} />
     <Route path="/mynovels/:novelId/episodes/create" element={<EpisodeCreate />} />
+    <Route path="/mynovels/:novelId/episodes/edit/:episodeId" element={<EpisodeEdit />} />
 
     {/* 인증이 필요한 페이지 */}
     {/* <Route path="/home" element={<PrivateRoute element={<Home />} />} /> */}
