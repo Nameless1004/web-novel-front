@@ -32,7 +32,7 @@ const Login = () => {
 
   // 소셜 로그인 처리
   const handleSocialLogin = (provider) => {
-    // Spring Boot OAuth2 Client 엔드포인트로 리다이렉트
+    // Spring Boot OAuth2 Client 엔드포인트로 리다이렉트.
     const backendOauthUrl = `${API_URLS.BASE}/oauth2/authorize/${provider}`;
     window.location.href = backendOauthUrl;
   };
