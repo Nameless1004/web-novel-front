@@ -23,7 +23,6 @@ const Login = () => {
       // JWT 토큰 상태에 저장 (Zustand)
       setInfo(accessToken, refreshToken, userId);
 
-      alert('로그인 성공!');
       navigate('/'); // 홈 화면으로 이동
     } catch (error) {
       console.error(error);
