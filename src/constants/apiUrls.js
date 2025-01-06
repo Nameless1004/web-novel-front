@@ -1,6 +1,6 @@
 // src/constants/apiUrls.js
 
-const API_BASE_URL = `${BACKEND_URL}`;  // 백엔드 API 기본 URL
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;  // 백엔드 API 기본 URL
 
 // 각 엔드포인트를 하나의 객체로 관리
 export const API_URLS = {
