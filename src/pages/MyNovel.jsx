@@ -48,7 +48,7 @@ const MyNovel = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-50 p-8">
+        <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-50 p-8 relative">
             {/* 뒤로가기 버튼 */}
             <div className="flex items-center mb-6">
                 <button
@@ -68,11 +68,10 @@ const MyNovel = () => {
                     <button
                         key={tab}
                         onClick={() => handleTabClick(tab)}
-                        className={`px-6 py-3 font-semibold text-gray-600 ${
-                            activeTab === tab
+                        className={`px-6 py-3 font-semibold text-gray-600 ${activeTab === tab
                                 ? 'border-b-4 border-purple-600 text-purple-600'
                                 : 'hover:text-purple-600'
-                        } transition duration-300`}
+                            } transition duration-300`}
                     >
                         {tab}
                     </button>
@@ -89,13 +88,6 @@ const MyNovel = () => {
                     ) : myNovels.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-64 border border-gray-300 bg-white rounded-lg shadow-md">
                             <p className="text-gray-500 text-sm">등록된 작품이 없습니다.</p>
-                            <button
-                                className="mt-4 px-6 py-3 bg-purple-600 text-white rounded-full flex items-center gap-2 shadow-lg hover:bg-purple-700 focus:outline-none transition duration-300"
-                                onClick={() => navigate('/publishing/new')}
-                            >
-                                <AiOutlinePlus size={18} />
-                                신규 작품 등록
-                            </button>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -143,7 +135,22 @@ const MyNovel = () => {
                     </div>
                 </div>
             )}
+
+            {/* 신규 작품 등록 버튼 - only for "내작품" tab */}
+            {activeTab === '내작품' && (
+                <div className="absolute bottom-8 right-8">
+                    <button
+                        className="px-6 py-3 bg-purple-600 text-white rounded-full flex items-center gap-2 shadow-lg hover:bg-purple-700 focus:outline-none transition duration-300"
+                        onClick={() => navigate('/publishing/new')}
+                    >
+                        <AiOutlinePlus size={18} />
+                        신규 작품 등록
+                    </button>
+                </div>
+            )}
         </div>
+
+
     );
 };
 
