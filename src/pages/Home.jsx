@@ -21,8 +21,13 @@ const Home = () => {
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [newNovelsPage, setNewNovelsPage] = useState(0); // 신규작 픽 현재 페이지
   const itemsPerPage = 9; // 페이지당 아이템 수
+
   useEffect(() => {
     // 인기 소설 데이터 불러오기
+    if(accessToken == null) {
+      navigate("/login")
+      return;
+    }
     const fetchHotNovels = async () => {
       const response = await getRequest(`${API_URLS.GET_HOT_NOVELS}`, { hour: new Date().getHours(), page: 1, size: 9 });
       setHotNovels(response.data?.data?.content || []);
