@@ -29,6 +29,7 @@ const RoutesConfig = () => (
     <Route path="/mynovels/:novelId/episodes/edit/:episodeId" element={<EpisodeEdit />} />
     <Route path="/viewer/:episodeId" element={<EpisodeViewer/>}/>
     <Route path="/novels/details" element={<NovelDetails />} />
+    <Route path="/*" element={<Home />} />
 
     {/* 인증이 필요한 페이지 */}
     {/* <Route path="/home" element={<PrivateRoute element={<Home />} />} /> */}
