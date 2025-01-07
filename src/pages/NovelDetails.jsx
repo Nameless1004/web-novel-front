@@ -42,7 +42,7 @@ const NovelDetails = () => {
         console.log(response)
         setEpisodes(response.data.content);
         setCurrentPage(response.data.pageNumber + 1);
-        setTotalPages(response.data.totalPages);
+        setTotalPages(response.data.totalPages + 1);
         setLoading(false)
     }
 
