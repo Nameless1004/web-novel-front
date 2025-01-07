@@ -20,6 +20,7 @@ export const API_URLS = {
   GET_HOT_NOVELS: `${API_BASE_URL}/api/novels/hot`,
   GET_MY_NOVEL: `${API_BASE_URL}/api/user/novels`,
   UPDATE_NOVEL: (novelId) => `${API_BASE_URL}/api/novels/${novelId}`,
+  DELETE_NOVEL: (novelId) => `${API_BASE_URL}/api/novels/${novelId}`,
   GET_NOVEL_DETAILS: (novelId) => `${API_BASE_URL}/api/novels/${novelId}`,
   CREATE_EPISODE: (novelId) => `${API_BASE_URL}/api/novels/${novelId}/episodes`,
   GET_EPISODE: (novelId) => `${API_BASE_URL}/api/novels/${novelId}/episodes`,
@@ -30,5 +31,6 @@ export const API_URLS = {
   CHECK_USERNAME: `${API_BASE_URL}/api/users/check/username`,
   CHECK_NICKNAME: `${API_BASE_URL}/api/users/check/nickname`,
   CHECK_EMAIL: `${API_BASE_URL}/api/users/check/email`,
-  INCREASE_VIEW: (episodeId) => `${API_BASE_URL}/api/episodes/${episodeId}/views`
+  INCREASE_VIEW: (episodeId) => `${API_BASE_URL}/api/episodes/${episodeId}/views`,
+  INCREASE_RECOMMENDATION: (episodeId) => `${API_BASE_URL}/api/episodes/${episodeId}/recommendations`
 };

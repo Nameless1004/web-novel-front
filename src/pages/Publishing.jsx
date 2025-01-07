@@ -88,6 +88,7 @@ const Publishing = () => {
           <Select
             id="tags"
             options={tagOptions}
+            isMulti
             value={selectedTags}
             onChange={(selected) => setSelectedTags(selected)} // 한 개의 태그 선택
             className="mt-2"

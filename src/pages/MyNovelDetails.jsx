@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getRequest } from '../utils/apiHelpers';
+import { getRequest, deleteRequest } from '../utils/apiHelpers'; // deleteRequest 추가
 import { API_URLS } from '../constants/apiUrls';
 import { ClipLoader } from 'react-spinners';
 import { FiArrowLeft } from 'react-icons/fi'; // 뒤로가기 아이콘
-import { FaEdit, FaList } from 'react-icons/fa'; // 수정, 관리 아이콘
+import { FaEdit, FaList, FaTrash } from 'react-icons/fa'; // 수정, 관리, 삭제 아이콘
 
 const MyNovelDetails = () => {
     const [novel, setNovel] = useState(null);
@@ -47,6 +47,22 @@ const MyNovelDetails = () => {
 
     const handleGoBack = () => {
         navigate('/mynovels');
+    };
+
+    const handleDeleteClick = async () => {
+        const confirmDelete = window.confirm("정말로 이 소설을 삭제하시겠습니까?");
+        if (confirmDelete) {
+            try {
+                const response = await deleteRequest(`${API_URLS.DELETE_NOVEL(novelId)}`);
+                if (response.statusCode === 200) {
+                    alert("소설이 성공적으로 삭제되었습니다.");
+                    navigate('/mynovels');
+                }
+            } catch (error) {
+                console.error("소설 삭제에 실패했습니다:", error);
+                alert("소설 삭제 중 오류가 발생했습니다.");
+            }
+        }
     };
 
     return (
@@ -116,6 +132,13 @@ const MyNovelDetails = () => {
                         >
                             <FaList />
                             에피소드 관리
+                        </button>
+                        <button
+                            onClick={handleDeleteClick}
+                            className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none transition duration-300"
+                        >
+                            <FaTrash />
+                            삭제하기
                         </button>
                     </div>
                 </div>

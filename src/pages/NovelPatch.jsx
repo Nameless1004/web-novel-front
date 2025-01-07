@@ -10,7 +10,7 @@ const NovelPatch = () => {
   const novelId = new URLSearchParams(location.search).get('id'); // 쿼리 파라미터에서 novelId를 가져옴
   const [title, setTitle] = useState(""); // 작품명
   const [synopsis, setSynopsis] = useState(""); // 작품 소개
-  const [selectedTags, setSelectedTags] = useState(null); // 선택한 태그
+  const [selectedTags, setSelectedTags] = useState([]); // 선택한 태그 (배열로 변경)
   const [tags, setTags] = useState([]); // 서버에서 가져온 태그들
   const [status, setStatus] = useState({ PUBLISHING: false, ON_HOLD: false, FINISHED: false }); // 작품 상태 (기본값 연재중)
 
@@ -37,7 +37,8 @@ const NovelPatch = () => {
             ON_HOLD: status === 'ON_HOLD',
             FINISHED: status === 'FINISHED',
           });
-          setSelectedTags(tags.length > 0 ? { value: tags[0].id, label: tags[0].name } : null); // 첫 번째 태그만 선택
+          // 다중 선택된 태그들 설정 (태그 배열로 설정)
+          setSelectedTags([]);
         }
       } catch (error) {
         console.error("소설 상세 정보를 가져오는 데 실패했습니다:", error);
@@ -60,7 +61,7 @@ const NovelPatch = () => {
       alert("작품 상태를 선택해주세요.");
       return;
     }
-    if (!selectedTags) {
+    if (selectedTags.length === 0) {
       alert("분류 태그를 선택해주세요.");
       return;
     }
@@ -70,17 +71,16 @@ const NovelPatch = () => {
       title,
       synopsis,
       status: selectedStatus, // 선택된 상태
-      tagIds: selectedTags ? [selectedTags.value] : [], // 선택된 태그가 있으면 value를 배열로 담기
+      tagIds: selectedTags.map(tag => tag.value), // 선택된 태그들의 value 값만 배열로 추출
     };
-        console.log(API_URLS.UPDATE_NOVEL(novelId))
-      const response = await patchRequest(`${API_URLS.UPDATE_NOVEL(novelId)}`, JSON.stringify(requestData));
-      console.log(response)
-      if (response.statusCode === 200) {
-        alert("작품이 성공적으로 수정되었습니다!");
-        navigate(`/mynovels`);
-      } else {
-        alert("작품 수정에 실패했습니다.");
-      }
+
+    const response = await patchRequest(`${API_URLS.UPDATE_NOVEL(novelId)}`, JSON.stringify(requestData));
+    if (response.statusCode === 200) {
+      alert("작품이 성공적으로 수정되었습니다!");
+      navigate(`/mynovels`);
+    } else {
+      alert("작품 수정에 실패했습니다.");
+    }
   };
 
   // 태그 변환: react-select에 맞게 { value, label } 형태로 변환
@@ -127,8 +127,9 @@ const NovelPatch = () => {
           <Select
             id="tags"
             options={tagOptions}
+            isMulti
             value={selectedTags}
-            onChange={(selected) => setSelectedTags(selected)} // 한 개의 태그 선택
+            onChange={(selected) => setSelectedTags(selected)} // 여러 개의 태그 선택
             className="mt-2"
             placeholder="태그를 선택하세요"
             classNamePrefix="react-select"

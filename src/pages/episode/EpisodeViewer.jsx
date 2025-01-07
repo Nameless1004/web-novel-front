@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { getRequest, postRequest, deleteRequest, patchRequest } from "../../utils/apiHelpers";
 import { API_URLS } from "../../constants/apiUrls";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ClipLoader } from "react-spinners";
 import { FaHome } from 'react-icons/fa';
 import { Eye, Heart, MessageCircle } from "lucide-react";
@@ -19,6 +19,7 @@ const EpisodeViewer = () => {
   const [comments, setComments] = useState([]);
   const [commentContent, setCommentContent] = useState("");
   const [novelId, setNovelId] = useState(0);
+  const [recommendationCount, setRecommendationCount] = useState(0);
   const userId = Number(useAuthStore().userId);
 
   const fetchEpisodeDetails = async () => {
@@ -27,7 +28,7 @@ const EpisodeViewer = () => {
       const response = await getRequest(API_URLS.GET_EPISODE_DETAILS(episodeId));
       setEpisode(response.data);
       setNovelId(response.data.novelId);
-
+      setRecommendationCount(response.data.recommendationCount);
       await patchRequest(API_URLS.INCREASE_VIEW(episodeId))
     } catch (err) {
       setError("회차 정보를 불러오는 데 실패했습니다.");
@@ -74,6 +75,18 @@ const EpisodeViewer = () => {
       toast.error("댓글 수정에 실패했습니다."); // Error Toast
     }
   };
+
+  const handleRecommend = async () => {
+    const response = await patchRequest(API_URLS.INCREASE_RECOMMENDATION(episodeId));
+
+    if (response.data != null && response.data.recommendationCount != null) {
+      setRecommendationCount(response.data.recommendationCount);
+      setShowHeart(true);
+      setTimeout(() => setShowHeart(false), 1000); // 1초 후 하트 숨기기
+    }
+  };
+
+  const [showHeart, setShowHeart] = useState(false);
 
   useEffect(() => {
     fetchEpisodeDetails();
@@ -136,7 +149,7 @@ const EpisodeViewer = () => {
           </span>
           <span className="flex items-center gap-1">
             <Heart className="w-5 h-5" />
-            {episode.recommendationCount} 추천
+            {recommendationCount}
           </span>
           <span className="flex items-center gap-1">
             <MessageCircle className="w-5 h-5" />
@@ -171,7 +184,7 @@ const EpisodeViewer = () => {
         </div>
       )}
 
-      <div className="flex justify-between mt-8">
+      <div className="relative  flex justify-between mt-8 items-center">
         <button
           onClick={goToPreviousEpisode}
           disabled={!episode.prevEpisodeId}
@@ -179,6 +192,30 @@ const EpisodeViewer = () => {
         >
           이전 회차
         </button>
+
+        <motion.button
+          onClick={handleRecommend}
+          className="flex items-center relative px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+          whileHover={{ scale: 1.1 }}
+        >
+          <Heart className="w-5 h-5 mr-2" />
+          {recommendationCount}
+
+          {/* 하트 애니메이션 */}
+          <AnimatePresence>
+            {showHeart && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5, y: 0 }}
+                animate={{ opacity: 1, scale: 1.2, y: -50 }}
+                exit={{ opacity: 0, scale: 0.8, y: -80 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              >
+                <Heart className="w-8 h-8 text-red-500" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
         <button
           onClick={goToNextEpisode}
           disabled={!episode.nextEpisodeId}
@@ -187,6 +224,7 @@ const EpisodeViewer = () => {
           다음 회차
         </button>
       </div>
+
 
       <div className="mt-6">
         <h2 className="text-xl font-semibold mb-4">댓글 작성</h2>
