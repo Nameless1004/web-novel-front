@@ -69,9 +69,11 @@ axiosInstance.interceptors.response.use(
 );
 
 // GET 요청
-export const getRequest = async (url) => {
+export const getRequest = async (url, params = undefined) => {
   try {
-    const response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(url, {
+      params: params,
+    });
     return response.data; // 응답 데이터를 반환
   } catch (error) {
     handleError(error);
