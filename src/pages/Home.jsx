@@ -30,14 +30,14 @@ const Home = () => {
     }
     const fetchHotNovels = async () => {
       const response = await getRequest(`${API_URLS.GET_HOT_NOVELS}`, { hour: new Date().getHours(), page: 1, size: 9 });
-      setHotNovels(response.data?.data?.content || []);
+      console.log(response.data.content)
+      setHotNovels(response.data.content || []);
     };
 
     // 신규작 픽 데이터 불러오기
     const fetchNewNovels = async () => {
       try {
         const response = await getRequest(`${API_URLS.GET_NOVEL}`, { orderby: 'new', direction: 'desc', page: 1, size: 7 });
-        console.log(response.data.content)
         setNewNovels(response.data.content || []);
       } catch (error) {
         console.error('Failed to fetch new novels:', error);

@@ -8,7 +8,7 @@ const Publishing = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState(""); // 작품명
   const [synopsis, setSynopsis] = useState(""); // 작품 소개
-  const [selectedTags, setSelectedTags] = useState(null); // 선택한 태그 (단일 선택으로 변경)
+  const [selectedTags, setSelectedTags] = useState([]); // 선택한 태그 (단일 선택으로 변경)
   const [tags, setTags] = useState([]); // 서버에서 가져온 태그들
 
   // 서버에서 태그 목록을 가져오는 함수
@@ -33,7 +33,7 @@ const Publishing = () => {
     const requestData = {
       title,
       synopsis,
-      tagIds: selectedTags ? [selectedTags.value] : [], // 선택된 태그가 있으면 value를 배열로 담기
+      tagIds: selectedTags && selectedTags.length > 0 ? selectedTags.map(tag => tag.value) : [], 
     };
 
     try {
@@ -42,7 +42,7 @@ const Publishing = () => {
         alert("작품이 성공적으로 등록되었습니다!");
         setTitle("");
         setSynopsis("");
-        setSelectedTags(null); // 초기화
+        setSelectedTags([]); // 초기화
         navigate("/mynovels");
       } else {
         alert("작품 등록에 실패했습니다.");
