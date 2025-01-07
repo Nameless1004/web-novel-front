@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getRequest, postRequest, deleteRequest, patchRequest } from "../../utils/apiHelpers";
 import { API_URLS } from "../../constants/apiUrls";
 import { motion } from 'framer-motion';
@@ -51,7 +51,7 @@ const EpisodeViewer = () => {
       fetchComments();
       toast.success("댓글이 성공적으로 작성되었습니다!"); // Success Toast
     } catch (err) {
-        toast.error("댓글 작성에 실패했습니다."); // Error Toast
+      toast.error("댓글 작성에 실패했습니다."); // Error Toast
     }
   };
 
@@ -61,7 +61,7 @@ const EpisodeViewer = () => {
       fetchComments(); // Refresh comments after deletion
       toast.success("댓글이 삭제되었습니다."); // Success Toast
     } catch (err) {
-        toast.error("댓글 삭제에 실패했습니다."); // Error Toast
+      toast.error("댓글 삭제에 실패했습니다."); // Error Toast
     }
   };
 
@@ -124,8 +124,8 @@ const EpisodeViewer = () => {
     <div className="container mx-auto p-8">
       {/* 홈 버튼 추가 */}
       <motion.button onClick={goBack} className="flex flex-col items-center" whileHover={{ scale: 1.1 }}>
-            <FaHome className="w-6 h-6 mb-2" />
-    </motion.button>
+        <FaHome className="w-6 h-6 mb-2" />
+      </motion.button>
 
       <div className="mb-8">
         <h1 className="text-gray-800 text-2xl font-bold">{`EP${episode.episodeNumber}. ${episode.title}`}</h1>
@@ -148,7 +148,12 @@ const EpisodeViewer = () => {
 
       <div className="mb-8">
         <div className="text-xl p-4 border rounded-lg bg-white leading-relaxed text-black whitespace-pre-wrap">
-          {episode.content}
+          {episode.content.split('\n').map((line, index) => (
+            <React.Fragment key={index}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))}
         </div>
       </div>
 
@@ -156,7 +161,12 @@ const EpisodeViewer = () => {
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4">작가의 한 마디</h2>
           <div className="p-4 border-l-4 border-blue-500 bg-blue-50 rounded-lg text-gray-800">
-            {episode.authorReview}
+            {episode.authorReview.split('\n').map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
           </div>
         </div>
       )}
@@ -206,22 +216,22 @@ const EpisodeViewer = () => {
                 </div>
                 <p className="mt-2">{comment.content}</p>
                 {
-                comment.userId === userId && (
-                  <div className="mt-2 flex space-x-2">
-                    <button
-                      onClick={() => handleEditComment(comment.id, prompt('Edit comment:', comment.content))}
-                      className="text-blue-500"
-                    >
-                      수정
-                    </button>
-                    <button
-                      onClick={() => handleDeleteComment(comment.id)}
-                      className="text-red-500"
-                    >
-                      삭제
-                    </button>
-                  </div>
-                )}
+                  comment.userId === userId && (
+                    <div className="mt-2 flex space-x-2">
+                      <button
+                        onClick={() => handleEditComment(comment.id, prompt('Edit comment:', comment.content))}
+                        className="text-blue-500"
+                      >
+                        수정
+                      </button>
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="text-red-500"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  )}
               </div>
             ))}
           </div>

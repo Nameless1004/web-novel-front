@@ -69,7 +69,14 @@ const MyNovelDetails = () => {
                 <div className="bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto">
                     <h1 className="text-4xl font-extrabold text-gray-800 mb-4">{novel.title}</h1>
                     <p className="text-lg text-gray-600 mb-6">작성자: <span className="font-semibold">{novel.authorNickname}</span></p>
-                    <p className="text-gray-600 mb-6">{novel.synopsis}</p>
+                    <p className="text-gray-600 mb-6">
+                        {novel.synopsis.split('\n').map((line, index) => (
+                            <React.Fragment key={index}>
+                                {line}
+                                <br />
+                            </React.Fragment>
+                        ))}
+                    </p>
 
                     <div className="bg-gray-50 p-6 rounded-lg shadow-inner mb-6">
                         <p className="text-lg font-semibold mb-4 text-gray-700">통계 정보</p>

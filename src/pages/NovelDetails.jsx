@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Eye, Heart, Bell, Share, MessageCircle } from 'lucide-react';
 import Header from '../components/Header';
@@ -12,7 +12,7 @@ const useQuery = () => {
 };
 
 const formatDate = (isoDate) => {
-    if(!isoDate) return 'Invalid Date';
+    if (!isoDate) return 'Invalid Date';
     const date = new Date(isoDate);
     return format(date, 'yyyy.MM.dd');
 }
@@ -137,7 +137,12 @@ const NovelDetails = () => {
                                 <MessageCircle className="w-4 h-4" /> {novelDetails.totalCommentCount}
                             </div>
                             <p className="text-gray-700 mb-4">
-                                {novelDetails.synopsis}
+                                {novelDetails.synopsis.split('\n').map((line, index) => (
+                                    <React.Fragment key={index}>
+                                        {line}
+                                        <br />
+                                    </React.Fragment>
+                                ))}
                             </p>
                         </div>
                     </div>
@@ -148,13 +153,13 @@ const NovelDetails = () => {
                     {/* Chapter List */}
                     <div className="flex-1">
                         <h2 className="text-2xl font-bold mb-4">회차리스트</h2>
-                        <div className='border-gray-500 border-b border-2 mb-4'/>
+                        <div className='border-gray-500 border-b border-2 mb-4' />
                         <div>
                             {episodes.length > 0 ? episodes.map((episode) => (
                                 <div
                                     key={episode.id}
-                                    className="flex items-start hover:bg-gray-50 cursor-pointer border-b" 
-                                    onClick={()=>navigate(`/viewer/${episode.id}`)}
+                                    className="flex items-start hover:bg-gray-50 cursor-pointer border-b"
+                                    onClick={() => navigate(`/viewer/${episode.id}`)}
                                 >
                                     <div className="min-w-[50px] text-gray-500 p-2">
                                         <div className="text-sm text-gray-500 bg-gray-100 rounded-full px-3 py-1 flex items-center justify-center">
