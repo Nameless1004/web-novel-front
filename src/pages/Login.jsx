@@ -85,25 +85,37 @@ const Login = () => {
             </button>
           </p>
         </div>
+{/* 소셜 로그인 버튼 */}
+<div className="mt-8 space-y-4">
+  {/* Kakao Login */}
+  <button
+    onClick={() => handleSocialLogin('kakao')}
+    className="w-full h-14 rounded-full hover:opacity-90 focus:outline-none transition duration-200"
+    style={{
+      backgroundImage: "url('kakao.png')", // 카카오 로고 이미지 경로
+      backgroundSize: "cover", // 커버 이미지 설정
+      backgroundPosition: "center", // 이미지 중앙 정렬
+      backgroundRepeat: "no-repeat", // 반복 제거
+    }}
+  >
+    <span className="sr-only">카카오로 로그인</span> {/* 접근성용 텍스트 */}
+  </button>
 
-        {/* 소셜 로그인 버튼 */}
-        <div className="mt-8 space-y-4">
-          {/* Google Login */}
-          <button
-            onClick={() => handleSocialLogin('google')}
-            className="w-full py-3 bg-white border-2 border-gray-300 rounded-full hover:bg-gray-100 focus:outline-none transition duration-200"
-          >
-            <span className="text-gray-700 font-semibold">구글로 로그인</span>
-          </button>
+  {/* Naver Login */}
+  <button
+    onClick={() => handleSocialLogin('naver')}
+    className="w-full h-14 rounded-full  hover:opacity-90 focus:outline-none transition duration-200"
+    style={{
+      backgroundImage: "url('naver.png')", // 네이버 로고 이미지 경로
+      backgroundSize: "cover", // 커버 이미지 설정
+      backgroundPosition: "center", // 이미지 중앙 정렬
+      backgroundRepeat: "no-repeat", // 반복 제거
+    }}
+  >
+    <span className="sr-only">네이버로 로그인</span> {/* 접근성용 텍스트 */}
+  </button>
+</div>
 
-          {/* Naver Login */}
-          <button
-            onClick={() => handleSocialLogin('naver')}
-            className="w-full py-3 bg-green-500 text-white rounded-full hover:bg-green-600 focus:outline-none transition duration-200"
-          >
-            <span className="font-semibold">네이버로 로그인</span>
-          </button>
-        </div>
       </div>
     </div>
   );
