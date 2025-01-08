@@ -201,7 +201,7 @@ const Home = () => {
 
       {/* 하단 */}
       <footer className="bg-white text-center py-6">
-        <p className="text-sm text-gray-600">&copy; 2024 노벨피아. All Rights Reserved.</p>
+        <p className="text-sm text-gray-600">&copy; 2025 픽션홀릭. All Rights Reserved.</p>
       </footer>
     </div>
   );
