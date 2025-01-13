@@ -96,7 +96,7 @@ const NovelDetails = () => {
                     <div className="w-48 h-64 overflow-hidden rounded-lg">
                         <div className="w-48 h-64 overflow-hidden rounded-lg">
                             <img
-                                src={novelDetails.image || '/cover.jpg'}
+                                src={novelDetails.coverImageUrl || '/cover.jpg'}
                                 className="w-full h-full object-cover"
                             />
                         </div>
@@ -224,7 +224,7 @@ const NovelDetails = () => {
                                 <div key={index} className="border rounded-lg p-3 bg-white">
                                     <div className="flex gap-3">
                                         <img
-                                            src={novel.coverUrl}
+                                            src={novel.coverImageUrl}
                                             alt={novel.title}
                                             className="w-20 h-28 object-cover rounded"
                                         />

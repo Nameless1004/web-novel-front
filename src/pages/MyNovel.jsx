@@ -19,7 +19,7 @@ const MyNovel = () => {
     const fetchNovels = async () => {
         setLoading(true);
         try {
-            const response = await getRequest(`${API_URLS.GET_MY_NOVEL}?page=${page}&size=10`);
+            const response = await getRequest(`${API_URLS.GET_MY_NOVEL}?page=${page}&size=9`);
             if (response.statusCode === 200) {
                 setMyNovels(response.data.content);
                 setTotalPages(response.data.totalPages);
@@ -90,25 +90,37 @@ const MyNovel = () => {
                             <p className="text-gray-500 text-sm">등록된 작품이 없습니다.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6">
                             {/* 작품 목록 렌더링 */}
                             {myNovels.map((novel) => (
                                 <div
                                     key={novel.novelId}
-                                    className="p-6 border border-gray-200 bg-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 cursor-pointer"
+                                    className="flex p-4 border border-gray-200 bg-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 cursor-pointer"
                                     onClick={() => handleNovelClick(novel.novelId)}
                                 >
-                                    <h3 className="text-xl font-bold text-gray-800 mb-2">{novel.title}</h3>
-                                    <p className="text-sm text-gray-600 mb-4">작성자: {novel.authorNickname}</p>
-                                    <div className="flex flex-wrap">
-                                        {novel.tags.map((tag, index) => (
-                                            <span
-                                                key={index}
-                                                className="text-xs text-purple-600 bg-purple-100 rounded-full px-2 py-1 mr-2 mb-2"
-                                            >
-                                                {tag}
-                                            </span>
-                                        ))}
+                                    {/* 커버 이미지 */}
+                                    <div className="w-1/3 mr-4">
+                                        <img
+                                            src={novel.coverImageUrl || '/cover.jpg'}
+                                            className="w-full h-auto object-cover rounded-lg"
+                                            style={{ aspectRatio: '3 / 4' }}
+                                        />
+                                    </div>
+
+                                    {/* 작품 정보 */}
+                                    <div className="w-2/3">
+                                        <h3 className="text-lg font-semibold text-gray-800 mb-2">{novel.title}</h3>
+                                        <p className="text-sm text-gray-600 mb-4">작성자: {novel.authorNickname}</p>
+                                        <div className="flex flex-wrap">
+                                            {novel.tags.map((tag, index) => (
+                                                <span
+                                                    key={index}
+                                                    className="text-xs text-purple-600 bg-purple-100 rounded-full px-2 py-1 mr-2 mb-2"
+                                                >
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -149,8 +161,6 @@ const MyNovel = () => {
                 </div>
             )}
         </div>
-
-
     );
 };
 

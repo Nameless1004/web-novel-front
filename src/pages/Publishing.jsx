@@ -1,5 +1,5 @@
 import { API_URLS } from '../constants/apiUrls'; // API URL 관리
-import { postRequest, getRequest } from '../utils/apiHelpers'; 
+import { postRequest, getRequest, postFormRequest } from '../utils/apiHelpers'; 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select'; // react-select import
@@ -10,6 +10,8 @@ const Publishing = () => {
   const [synopsis, setSynopsis] = useState(""); // 작품 소개
   const [selectedTags, setSelectedTags] = useState([]); // 선택한 태그 (단일 선택으로 변경)
   const [tags, setTags] = useState([]); // 서버에서 가져온 태그들
+  const [cover, setCover] = useState(null); // 커버 이미지
+  const [coverPreview, setCoverPreview] = useState(null); // 커버 이미지 미리보기 URL
 
   // 서버에서 태그 목록을 가져오는 함수
   useEffect(() => {
@@ -29,28 +31,29 @@ const Publishing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // 기본 동작 방지
 
-    // 제출할 데이터 준비
-    const requestData = {
-      title,
-      synopsis,
-      tagIds: selectedTags && selectedTags.length > 0 ? selectedTags.map(tag => tag.value) : [], 
-    };
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("synopsis", synopsis);
 
-    try {
-      const response = await postRequest(API_URLS.CREATE_NOVEL, JSON.stringify(requestData));
+    if (selectedTags && selectedTags.length > 0) {
+      selectedTags.forEach(tag => formData.append("tagIds", tag.value));
+    }
+
+    if (cover) {
+      formData.append("cover", cover);
+    }
+
+      const response = await postFormRequest(API_URLS.CREATE_NOVEL, formData);
+
       if (response.statusCode === 201) {
         alert("작품이 성공적으로 등록되었습니다!");
         setTitle("");
         setSynopsis("");
-        setSelectedTags([]); // 초기화
+        setSelectedTags([]);
+        setCover(null); // 초기화
+        setCoverPreview(null); // 미리보기 초기화
         navigate("/mynovels");
-      } else {
-        alert("작품 등록에 실패했습니다.");
       }
-    } catch (error) {
-      console.error("작품 등록 오류:", error);
-      alert("작품 등록에 오류가 발생했습니다.");
-    }
   };
 
   // 태그 변환: react-select에 맞게 { value, label } 형태로 변환
@@ -58,6 +61,17 @@ const Publishing = () => {
     value: tag.id,
     label: tag.name,
   }));
+
+  // 커버 이미지 업로드 및 미리보기 업데이트
+  const handleCoverChange = (e) => {
+    const file = e.target.files[0];
+    setCover(file);
+    
+    // 파일을 URL로 변환하여 미리보기
+    if (file) {
+      setCoverPreview(URL.createObjectURL(file));
+    }
+  };
 
   // 취소 버튼 핸들러
   const handleCancel = () => {
@@ -90,7 +104,7 @@ const Publishing = () => {
             options={tagOptions}
             isMulti
             value={selectedTags}
-            onChange={(selected) => setSelectedTags(selected)} // 한 개의 태그 선택
+            onChange={(selected) => setSelectedTags(selected)}
             className="mt-2"
             placeholder="태그를 선택하세요"
             classNamePrefix="react-select"
@@ -107,6 +121,30 @@ const Publishing = () => {
             className="mt-2 p-3 border-2 border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="작품에 대한 간단한 소개를 작성해주세요."
           />
+        </div>
+
+        {/* 커버 이미지 업로드 */}
+        <div className="mb-6 flex">
+          <div className="mr-4">
+            {/* 미리보기 이미지 */}
+            {coverPreview && (
+              <img
+                src={coverPreview}
+                alt="Cover Preview"
+                className="w-32 h-32 object-cover rounded-lg"
+              />
+            )}
+          </div>
+          <div>
+            <label htmlFor="cover" className="block text-lg font-medium text-gray-700">커버 이미지</label>
+            <input
+              id="cover"
+              type="file"
+              accept="image/*"
+              onChange={handleCoverChange}
+              className="mt-2"
+            />
+          </div>
         </div>
 
         {/* 작품 등록 버튼 */}

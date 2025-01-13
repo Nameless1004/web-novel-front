@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { postRequest } from '../../utils/apiHelpers'; // API 요청 헬퍼
+import { postFormRequest } from '../../utils/apiHelpers'; // API 요청 헬퍼
 import { useNavigate, useParams } from 'react-router-dom';
 import { API_URLS } from '../../constants/apiUrls'; // API URL 관리
 import { FiSave, FiXCircle } from 'react-icons/fi'; // 아이콘 추가
@@ -10,6 +10,8 @@ const EpisodeCreate = () => {
   const [title, setTitle] = useState(''); // 에피소드 제목
   const [authorReview, setAuthorReview] = useState(''); // 작가 리뷰
   const [content, setContent] = useState(''); // 에피소드 내용
+  const [cover, setCover] = useState(null); // 커버 이미지
+  const [coverPreview, setCoverPreview] = useState(null); // 커버 이미지 미리보기
   const [error, setError] = useState(null); // 에러 메시지
 
   // 에피소드 등록 함수
@@ -22,15 +24,18 @@ const EpisodeCreate = () => {
       return;
     }
 
-    // 요청 데이터 준비
-    const requestData = {
-      title,
-      authorReview,
-      content,
-    };
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('authorReview', authorReview);
+    formData.append('content', content);
+
+    // 커버 이미지가 있을 경우 추가
+    if (cover) {
+      formData.append('cover', cover);
+    }
 
     try {
-      const response = await postRequest(`${API_URLS.CREATE_EPISODE(novelId)}`, JSON.stringify(requestData));
+      const response = await postFormRequest(`${API_URLS.CREATE_EPISODE(novelId)}`, formData);
       if (response.statusCode === 201) {
         alert('에피소드가 성공적으로 등록되었습니다!');
         navigate(`/mynovels/${novelId}/episodes`);
@@ -40,6 +45,22 @@ const EpisodeCreate = () => {
     } catch (error) {
       console.error('에피소드 등록 오류:', error);
       alert('에피소드 등록에 오류가 발생했습니다.');
+    }
+  };
+
+  // 커버 이미지 처리 함수
+  const handleCoverChange = (e) => {
+    const file = e.target.files[0];
+    setCover(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCoverPreview(reader.result); // 이미지 미리보기 설정
+      };
+      reader.readAsDataURL(file); // 파일을 읽어 Data URL로 변환
+    } else {
+      setCoverPreview(null);
     }
   };
 
@@ -86,6 +107,35 @@ const EpisodeCreate = () => {
               placeholder="에피소드 내용을 작성해주세요"
               required
             />
+          </div>
+
+          {/* 커버 이미지 업로드 및 미리보기 */}
+          <div className="mb-6">
+            <label htmlFor="cover" className="text-lg font-semibold text-gray-700">커버 이미지</label>
+            <div className="flex items-center space-x-4">
+              {coverPreview && (
+                <div>
+                  <img src={coverPreview} alt="Cover Preview" className="w-24 h-24 object-cover rounded-md" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCover(null);
+                      setCoverPreview(null); // 커버 이미지 제거
+                    }}
+                    className="text-red-500 mt-2"
+                  >
+                    제거
+                  </button>
+                </div>
+              )}
+              <input
+                id="cover"
+                type="file"
+                accept="image/*"
+                onChange={handleCoverChange}
+                className="mt-2"
+              />
+            </div>
           </div>
 
           {/* 에러 메시지 */}

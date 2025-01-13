@@ -22,6 +22,9 @@ const EpisodeViewer = () => {
   const [recommendationCount, setRecommendationCount] = useState(0);
   const userId = Number(useAuthStore().userId);
 
+  // 상태 추가: 커버 이미지 접기
+  const [isCoverImageVisible, setIsCoverImageVisible] = useState(true);
+
   const fetchEpisodeDetails = async () => {
     try {
       setLoading(true);
@@ -109,6 +112,11 @@ const EpisodeViewer = () => {
     navigate(`/novels/details?id=${novelId}`); // 홈으로 이동
   };
 
+  // 커버 이미지 접기/펼치기 함수
+  const toggleCoverImage = () => {
+    setIsCoverImageVisible(!isCoverImageVisible);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -158,10 +166,32 @@ const EpisodeViewer = () => {
         </div>
         <div className="border-2 border-gray-200 mt-2 border-b"></div>
       </div>
+      {/* 커버 이미지 */}
+      {isCoverImageVisible && (
+        <div className="mb-8 flex justify-center">
+          <img
+            src={episode.coverImageUrl}
+            alt="Cover"
+            className="h-[720px] w-auto object-contain aspect-[3/4] max-w-full"
+          />
+        </div>
+      )}
+
+      {/* 커버 이미지 접기/펼치기 버튼 */}
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={toggleCoverImage}
+          className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+        >
+          {isCoverImageVisible ? "커버 이미지 접기" : "커버 이미지 펼치기"}
+        </button>
+      </div>
+
+
 
       <div className="mb-8">
         <div className="text-xl p-4 border rounded-lg bg-white leading-relaxed text-black whitespace-pre-wrap">
-          {episode.content.split('\n').map((line, index) => (
+          {episode.content.split("\n").map((line, index) => (
             <React.Fragment key={index}>
               {line}
               <br />
@@ -174,7 +204,7 @@ const EpisodeViewer = () => {
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4">작가의 한 마디</h2>
           <div className="p-4 border-l-4 border-blue-500 bg-blue-50 rounded-lg text-gray-800">
-            {episode.authorReview.split('\n').map((line, index) => (
+            {episode.authorReview.split("\n").map((line, index) => (
               <React.Fragment key={index}>
                 {line}
                 <br />
@@ -184,7 +214,7 @@ const EpisodeViewer = () => {
         </div>
       )}
 
-      <div className="relative  flex justify-between mt-8 items-center">
+      <div className="relative flex justify-between mt-8 items-center">
         <button
           onClick={goToPreviousEpisode}
           disabled={!episode.prevEpisodeId}
@@ -224,7 +254,6 @@ const EpisodeViewer = () => {
           다음 회차
         </button>
       </div>
-
 
       <div className="mt-6">
         <h2 className="text-xl font-semibold mb-4">댓글 작성</h2>

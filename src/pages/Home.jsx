@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaHome, FaBook, FaBell, FaUser } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import axios from 'axios'; // Axios 추가
 import useAuthStore from '../store/authStore'; // Zustand store
 import Particles from 'react-tsparticles'; // 파티클 효과 라이브러리
 import { getRequest } from '../utils/apiHelpers'
@@ -19,19 +16,27 @@ const Home = () => {
   const [novelPickNovels, setNovelPickNovels] = useState([]); // 노벨픽 데이터
   const [newNovels, setNewNovels] = useState([]); // 신규작 픽 데이터
   const [loading, setLoading] = useState(true); // 로딩 상태
+  const [currentHour, setCurrentHour] = useState(null);
   const [newNovelsPage, setNewNovelsPage] = useState(0); // 신규작 픽 현재 페이지
   const itemsPerPage = 9; // 페이지당 아이템 수
 
   useEffect(() => {
     // 인기 소설 데이터 불러오기
-    if(accessToken == null) {
+    if (accessToken == null) {
       navigate("/login")
       return;
     }
+
+    const FetchCurrentTime = async () => {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0'); // 두 자리로 표시
+      setCurrentHour(`${hours}:00`);
+    }
+
     const fetchHotNovels = async () => {
       const response = await getRequest(`${API_URLS.GET_HOT_NOVELS}`, { hour: new Date().getHours(), page: 1, size: 9 });
-      console.log(response.data.content)
       setHotNovels(response.data.content || []);
+      FetchCurrentTime();
     };
 
     // 신규작 픽 데이터 불러오기
@@ -128,20 +133,39 @@ const Home = () => {
           )}
         </div>
       )}
+   <main className="container mx-auto p-8">
+  <h3 className="text-3xl font-semibold text-left text-black mb-4">인기 작품</h3>
+  <div className="text-2xl text-left text-gray-800 mb-8">
+      <span className="font-bold"> {currentHour}</span> 기준 픽션홀릭 유저들의 실시간 <span className="text-blue-600 font-semibold">조회수</span> 인기작품
+    </div>
+  {loading ? (
+    <p className="text-center text-gray-500">로딩 중...</p>
+  ) : (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      {hotNovels.length === 0 ? (
+        <div className="bg-gray-100 rounded-lg p-4 flex items-center justify-center col-span-3">
+          순위 집계 중...
+        </div>
+      ) : (
+        hotNovels.map((novel, index) => (
+          <div
+            key={novel.novelId}
+            className="bg-white rounded-lg p-3 flex flex-col lg:flex-row h-full cursor-pointer"
+            onClick={() => navigate(`/novels/details?id=${novel.novelId}`)} // 클릭 시 노벨 디테일 페이지로 이동
+          >
+            {/* 왼쪽: 커버 이미지 */}
+            <div className="w-full lg:w-1/3 h-48 mb-3 lg:mb-0">
+              <img
+                src={novel.coverImageUrl || 'default-cover.jpg'} // 커버 이미지 URL
+                alt="Cover"
+                className="w-full h-full object-cover rounded-lg"
+                style={{ aspectRatio: '3 / 4' }} // 3:4 비율로 설정
+              />
+            </div>
 
-      {/* 인기 소설 */}
-      <main className="container mx-auto p-8">
-        <h3 className="text-3xl font-semibold text-left text-black mb-4">인기 작품</h3>
-        {loading ? (
-          <p className="text-center text-gray-500">로딩 중...</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-            {hotNovels.map((novel, index) => (
-              <div
-                key={novel.novelId}
-                className="bg-white shadow-lg rounded-lg p-4 border border-gray-300 cursor-pointer"
-                onClick={() => navigate(`/novels/details?id=${novel.novelId}`)} // 클릭 시 노벨 디테일 페이지로 이동
-              >
+            {/* 오른쪽: 소설 정보 */}
+            <div className="flex flex-col justify-between h-full lg:w-2/3 lg:pl-4">
+              <div>
                 <div className="text-gray-500 text-sm">#{index + 1} 순위</div>
                 <h3 className="text-xl font-semibold text-black mt-2">{novel.title}</h3>
                 <p className="text-md text-gray-700 mt-1">저자: {novel.authorNickname}</p>
@@ -153,20 +177,18 @@ const Home = () => {
                   ))}
                 </div>
               </div>
-            ))}
-            {Array.from({ length: 9 - hotNovels.length }).map((_, idx) => (
-              <div key={`placeholder-${idx}`} className="bg-gray-100 shadow-lg rounded-lg p-4 flex items-center justify-center">
-                순위 집계 중...
-              </div>
-            ))}
+            </div>
           </div>
-        )}
-      </main>
+        ))
+      )}
+    </div>
+  )}
+</main>
 
       {/* 신규작 픽 */}
       <main className="container mx-auto p-8">
         <h2 className="text-3xl font-semibold text-left text-black mb-4">따끈따끈 신규 작품!</h2>
-        <div className="text-1xl text-left text-gray-500 mb-8">새로운걸 원한다면</div>
+        <div className="text-2xl text-left text-gray-500 mb-8">새로운걸 원한다면</div>
         {loading ? (
           <p className="text-center text-gray-500">로딩 중...</p>
         ) : (
@@ -182,7 +204,7 @@ const Home = () => {
                   {/* 이미지 부분 */}
                   <div className="w-full rounded-xl" style={{ aspectRatio: '5 / 7' }}>
                     <img
-                      src={novel.image || 'cover.jpg'} // 기본 이미지 경로
+                      src={novel.coverImageUrl || 'cover.jpg'} // 기본 이미지 경로
                       className="w-full h-full object-cover rounded-xl"  // 이미지 자체도 라운드 처리
                     />
                   </div>
