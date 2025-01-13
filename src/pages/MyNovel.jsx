@@ -19,7 +19,7 @@ const MyNovel = () => {
     const fetchNovels = async () => {
         setLoading(true);
         try {
-            const response = await getRequest(`${API_URLS.GET_MY_NOVEL}?page=${page}&size=9`);
+            const response = await getRequest(`${API_URLS.GET_MY_NOVEL}?page=${page}&size=25`);
             if (response.statusCode === 200) {
                 setMyNovels(response.data.content);
                 setTotalPages(response.data.totalPages);
