@@ -43,10 +43,8 @@ const SearchPage = () => {
     };
 
     useEffect(() => {
-        console.log('test')
         // Extract query params from URL to set initial state
         if (!location.search) {
-            console.log('test')
             setKeyword('');
             setShowResult(false)
             setSearchKeyword('');
@@ -79,7 +77,7 @@ const SearchPage = () => {
 
     }, [location.search]); // Update when location changes
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchSearchResults();
     }, [searchKeyword, sortOption, searchType, page])
     const handleSearch = (e) => {
@@ -90,7 +88,7 @@ const SearchPage = () => {
             alert('검색어를 입력해주세요.');
             return;
         }
-        
+
         setShowResult(true)
         setPage(1);
         setShowTabs(true); // Show tabs when search is performed
@@ -239,8 +237,15 @@ const SearchPage = () => {
                                                 <p className="text-gray-600">작가: {novel.authorNickname}</p>
                                                 <p className="text-gray-600">공개일자: {novel.publishDate}</p>
                                                 <p className="text-gray-600">업데이트일자: {novel.lastUpdateDate}</p>
-                                                <div className="mt-2">
-                                                    <span className="text-sm text-gray-500">{novel.tags.join(' · ')}</span>
+                                                <div className="mt-2 flex flex-wrap gap-2">
+                                                    {novel.tags.map((tag, index) => (
+                                                        <span
+                                                            key={index}
+                                                            className="text-sm bg-purple-100 text-purple-700 px-2 py-1 rounded-full"
+                                                        >
+                                                            #{tag}
+                                                        </span>
+                                                    ))}
                                                 </div>
                                             </div>
                                         </li>
