@@ -29,10 +29,10 @@ const Header = ({ onProfileToggle, isProfileOpen }) => {
               <FaBook className="w-5 h-5 mb-1" />
               내 작품
             </motion.button>
-            <motion.button className="flex flex-col items-center" whileHover={{ scale: 1.1 }}>
+            {/* <motion.button className="flex flex-col items-center" whileHover={{ scale: 1.1 }}>
               <FaBell className="w-5 h-5 mb-1" />
               알림
-            </motion.button>
+            </motion.button> */}
             <motion.button onClick= {handleSearch}className="flex flex-col items-center" whileHover={{ scale: 1.1 }}>
               <FaSearch  className="w-5 h-5 mb-1" />
               검색
