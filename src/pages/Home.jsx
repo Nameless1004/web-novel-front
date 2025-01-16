@@ -82,30 +82,6 @@ const Home = () => {
       />
       <Header isProfileOpen={isProfileOpen} onProfileToggle={() => setProfileOpen(!isProfileOpen)} />
       <div className="w-full h-[550px] bg-cover bg-center" style={{ backgroundImage: "url('/banner.jpg')", backgroundPosition: 'bottom' }} />
-
-      {/* 프로필 팝업 */}
-      {isProfileOpen && (
-        <div className="fixed top-16 right-6 w-72 bg-white shadow-lg rounded-lg p-6 z-50">
-          {accessToken ? (
-            <div>
-              <div className="flex items-center space-x-4">
-                <img src="https://via.placeholder.com/50" alt="프로필 이미지" className="w-12 h-12 rounded-full" />
-                <div>
-                  <p className="text-lg font-semibold text-black">{profileData?.nickname}</p>
-                </div>
-              </div>
-              <button onClick={handleLogout} className="block w-full mt-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none">
-                로그아웃
-              </button>
-            </div>
-          ) : (
-            <button onClick={() => navigate('/login')} className="block w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none">
-              로그인
-            </button>
-          )}
-        </div>
-      )}
-
       {/* 인기 작품 */}
       <main className="container mx-auto p-8">
         <h3 className="text-3xl font-semibold text-left text-black mb-4">인기 작품</h3>
