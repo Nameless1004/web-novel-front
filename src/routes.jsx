@@ -10,6 +10,7 @@ import EpisodeViewer from './pages/episode/EpisodeViewer'
 import EpisodeEdit from './pages/episode/EpisodeEdit'
 import NovelPatch from './pages/NovelPatch'
 import NovelDetails from './pages/NovelDetails'
+import SearchPage from './pages/SearchPage'
 import Publishing from './pages/Publishing'
 import LoginSuccess from './components/LoginSuccess';
 import PrivateRoute from './components/PrivateRoute';
@@ -29,6 +30,7 @@ const RoutesConfig = () => (
     <Route path="/mynovels/:novelId/episodes/edit/:episodeId" element={<EpisodeEdit />} />
     <Route path="/viewer/:episodeId" element={<EpisodeViewer/>}/>
     <Route path="/novels/details" element={<NovelDetails />} />
+    <Route path="/novels/search" element= {<SearchPage />} />
     <Route path="/*" element={<Home />} />
 
     {/* 인증이 필요한 페이지 */}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaHome, FaBook, FaBell, FaUser } from 'react-icons/fa';
+import { FaHome, FaBook, FaBell, FaUser, FaSearch  } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import ProfilePopup from './ProfilePopup'; // ProfilePopup 컴포넌트 import
 
@@ -10,6 +10,10 @@ const Header = ({ onProfileToggle, isProfileOpen }) => {
   const handleMyNovels = () => {
     navigate('/mynovels');
   };
+
+  const handleSearch = () => {
+    navigate('/novels/search');
+  }
 
   return (  
     <header className="mx-auto p-8">
@@ -28,6 +32,10 @@ const Header = ({ onProfileToggle, isProfileOpen }) => {
             <motion.button className="flex flex-col items-center" whileHover={{ scale: 1.1 }}>
               <FaBell className="w-5 h-5 mb-1" />
               알림
+            </motion.button>
+            <motion.button onClick= {handleSearch}className="flex flex-col items-center" whileHover={{ scale: 1.1 }}>
+              <FaSearch  className="w-5 h-5 mb-1" />
+              검색
             </motion.button>
             <motion.button onClick={onProfileToggle} className="flex flex-col items-center" whileHover={{ scale: 1.1 }}>
               <FaUser className="w-5 h-5 mb-1" />

@@ -16,6 +16,7 @@ export const API_URLS = {
   DELETE_COMMENT: (novelId, episodeId, commentId) => `${API_BASE_URL}/api/novels/${novelId}/episodes/${episodeId}/comments/${commentId}`,
   UPDATE_COMMENT: (novelId, episodeId, commentId) => `${API_BASE_URL}/api/novels/${novelId}/episodes/${episodeId}/comments/${commentId}`,
   GET_COMMENTS: (novelId, episodeId) => `${API_BASE_URL}/api/novels/${novelId}/episodes/${episodeId}/comments`,
+  NOVEL_SEARCH: `${API_BASE_URL}/api/novels/search`,
   GET_NOVEL: `${API_BASE_URL}/api/novels`,
   GET_HOT_NOVELS: `${API_BASE_URL}/api/novels/hot`,
   GET_MY_NOVEL: `${API_BASE_URL}/api/user/novels`,

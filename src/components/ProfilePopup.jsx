@@ -9,8 +9,10 @@ const ProfilePopup = ({ isOpen, onClose }) => {
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
+    console.log(accessToken)
     const fetchProfileData = async () => {
-      if (isOpen) {
+      if (isOpen && accessToken) {
+        console.log(accessToken)
         const response = await getRequest(`${API_URLS.USER_PROFILE}`);
         setProfileData(response.data);
       }
@@ -50,7 +52,7 @@ const ProfilePopup = ({ isOpen, onClose }) => {
           </div>
         ) : (
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/')}
             className="block w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none"
           >
             로그인

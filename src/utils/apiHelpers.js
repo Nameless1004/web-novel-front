@@ -42,7 +42,6 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     const { status } = error.response;
 
-    console.log("error!!!!!!!!!!!!!!!!!!" + status)
     // 401 Unauthorized 에러인 경우
     if (status === 401) {
       const refreshToken = useAuthStore.getState().refreshToken;
@@ -56,7 +55,6 @@ axiosInstance.interceptors.response.use(
             refreshToken: `Bearer ${refreshToken}`,
           });
 
-          console.log(response)
           const { userId, accessToken, refreshToken: newRefreshToken } = response.data.data;
 
           // 새 액세스 토큰을 상태 관리에 저장
@@ -87,7 +85,6 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     const { status } = error.response;
 
-    console.log("error!!!!!!!!!!!!!!!!!!" + status)
     // 401 Unauthorized 에러인 경우
     if (status === 401) {
       const refreshToken = useAuthStore.getState().refreshToken;
@@ -101,7 +98,6 @@ axios.interceptors.response.use(
             refreshToken: `Bearer ${refreshToken}`,
           });
 
-          console.log(response)
           const { userId, accessToken, refreshToken: newRefreshToken } = response.data.data;
 
           // 새 액세스 토큰을 상태 관리에 저장
@@ -204,7 +200,12 @@ const handleError = (error) => {
   if (error.response) {
     // 서버가 응답을 보냈고, 응답 코드가 2xx가 아닌 경우
     console.error('Error Response:', error.response.data);
-    alert(`Error: ${error.response.data.message || 'Unknown error'}`);
+    if (error.response.status === 401) {
+      // 401 에러인 경우 로그인 필요 메시지 출력
+      alert('로그인이 필요한 서비스입니다.');
+    } else {
+      alert(`Error: ${error.response.data.message || 'Unknown error'}`);
+    }
   } else if (error.request) {
     // 요청은 했지만 응답을 받지 못한 경우
     console.error('Error Request:', error.request);
